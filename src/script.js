@@ -9,7 +9,7 @@ function receiveSizeChangeEvent() {
 }
 receiveSizeChangeEvent();
 
-var catTime = 100;
+var catTime = 150;
 var catTimer = 0;
 var catAngleSpeed = 35;
 var catFallSpeed = 6;
