@@ -35,7 +35,7 @@ Cat.prototype.update = function() {
     this.img.style.transform = 'rotate(' + this.angle + 'deg)';
     this.img.style.top = this.y + '%';
     this.img.style.width = this.width + '%';
-    if (this.y >= 99 - this.width * Math.sqrt(2)) {
+    if (this.y >= 100) {
         this.alive = false;
         this.img.remove();
     }
