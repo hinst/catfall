@@ -77,7 +77,7 @@ var globalCatId = 1;
 var latestTickTime = new Date().getTime();
 
 function main() {
-    var deltaTime = new Date().getTime() - latestTickTime;
+    var deltaTime = Math.min(new Date().getTime() - latestTickTime, 100);
     latestTickTime = new Date().getTime();
     catTimer -= deltaTime;
     if (catTimer <= 0) {
@@ -112,4 +112,4 @@ function main() {
 
 window.addEventListener('resize', receiveSizeChangeEvent);
 receiveSizeChangeEvent();
-setInterval(main, 1000 / 60);
+setInterval(main, 1000 / 45);
