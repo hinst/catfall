@@ -11,7 +11,6 @@ receiveSizeChangeEvent();
 
 var catTime = 100;
 var catTimer = 0;
-var catWidth = 5;
 var catAngleSpeed = 35;
 var catFallSpeed = 6;
 var snowflakeWidth = 3;
@@ -23,7 +22,7 @@ function Cat() {
     this.img = null;
     this.x = 0;
     this.xSpeed = 0;
-    this.y = -catWidth;
+    this.y = -snowflakeWidth;
     this.angle = 360 * Math.random();
     this.alive = true;
     this.width = 0;
