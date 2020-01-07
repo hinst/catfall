@@ -10,26 +10,35 @@ function receiveSizeChangeEvent() {
 receiveSizeChangeEvent();
 
 var tickTime = 1000 / 60;
-var catTime = 5000;
+var catTime = 3000;
 var catTimer = 0;
 var catWidth = 5;
 var catAngleSpeed = 45;
 var catFallSpeed = 5;
+var snowflakeWidth = 3;
 
 function Cat() {
     /** @type {HTMLImageElement} */
     this.img = null;
     this.y = -catWidth;
     this.angle = 360 * Math.random();
+    this.alive = true;
+    this.width = 0;
+    this.angleSpeed = catAngleSpeed * (0.8 * Math.random() + 0.2);
 }
 
 Cat.prototype.update = function() {
-    this.angle += catAngleSpeed * tickTime / 1000;
+    this.angle += this.angleSpeed * tickTime / 1000;
     while (this.angle >= 360)
         this.angle -= 360;
     this.y += catFallSpeed * tickTime / 1000;
     this.img.style.transform = 'rotate(' + this.angle + 'deg)';
     this.img.style.top = this.y + '%';
+    this.img.style.width = this.width + '%';
+    if (this.y >= 99 - this.width * Math.sqrt(2)) {
+        this.alive = false;
+        this.img.remove();
+    }
 }
 
 /** @type {Cat[]} */
@@ -40,13 +49,13 @@ function main() {
     if (catTimer <= 0) {
         catTimer = catTime;
         var img = document.createElement('img');
-        img.src = 'transparent-cat.png';
+        img.src = 'snowflake.png';
         img.style.position = 'absolute';
         img.style.left = Math.floor(Math.random() * (100 - catWidth)) + '%';
-        img.style.width = catWidth + '%';
         mainPanel.append(img);
         var cat = new Cat();
         cat.img = img;
+        cat.width = snowflakeWidth;
         cats.push(cat);
         cat.img.style.transform = 'rotate(' + cat.angle + ')';
     }
@@ -54,6 +63,7 @@ function main() {
         var cat = cats[i];
         cat.update();
     }
+    cats = cats.filter(cat => cat.alive);
 }
 
 window.addEventListener('resize', receiveSizeChangeEvent);
