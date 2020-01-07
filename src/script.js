@@ -13,9 +13,10 @@ var catTime = 100;
 var catTimer = 0;
 var catWidth = 5;
 var catAngleSpeed = 35;
-var catFallSpeed = 5;
+var catFallSpeed = 6;
 var snowflakeWidth = 3;
 var windSpeed = 5;
+var windyOffset = 35;
 
 function Cat() {
     /** @type {HTMLImageElement} */
@@ -88,7 +89,7 @@ function main() {
         var cat = new Cat();
         cat.img = img;
         cat.xSpeed = windSpeed / 2;
-        cat.x = Math.floor(Math.random() * 120 - 20);
+        cat.x = Math.floor(Math.random() * (100 + windyOffset) - windyOffset);
         cat.width = snowflakeWidth;
         cats.push(cat);
         cat.img.style.transform = 'rotate(' + cat.angle + ')';
