@@ -1,4 +1,4 @@
-const mainPanel = document.getElementById('mainPanel');
+var mainPanel = document.getElementById('mainPanel');
 
 var mainWidth;
 function receiveSizeChangeEvent() {
@@ -10,16 +10,19 @@ function receiveSizeChangeEvent() {
 receiveSizeChangeEvent();
 
 var tickTime = 1000 / 60;
-var catTime = 3000;
+var catTime = 100;
 var catTimer = 0;
 var catWidth = 5;
 var catAngleSpeed = 35;
 var catFallSpeed = 5;
 var snowflakeWidth = 3;
+var windSpeed = 5;
 
 function Cat() {
     /** @type {HTMLImageElement} */
     this.img = null;
+    this.x = 0;
+    this.xSpeed = 0;
     this.y = -catWidth;
     this.angle = 360 * Math.random();
     this.alive = true;
@@ -40,8 +43,10 @@ function clipAngle(angle) {
 
 Cat.prototype.update = function() {
     this.angle += clipAngle(this.angleSpeed * tickTime / 1000);
+    this.x += this.xSpeed * tickTime / 1000;
     this.y += catFallSpeed * tickTime / 1000;
     this.img.style.transform = 'rotate(' + this.angle + 'deg)';
+    this.img.style.left = this.x + '%';
     this.img.style.top = this.y + '%';
     this.img.style.width = this.width + '%';
     if (this.y >= 100) {
@@ -53,29 +58,36 @@ Cat.prototype.update = function() {
 /** @type {Cat[]} */
 var cats = [];
 
-var waves = new Array(10);
-for (var i = 0; i < 10; i++) {
-    const img = document.createElement('img');
+/** @type {HTMLImageElement[]} */
+var waves = [];
+for (var i = -1; i < 10; i++) {
+    var img = document.createElement('img');
     img.src = './wave.svg';
     img.style.position = 'absolute';
-    img.style.left = i * 10 + '%';
-    img.style.width = '10%';
+    img.style.left = '' + (i * 10) + '%';
+    img.style.width = '10.1%';
     img.style.bottom = 0;
     img.style.zIndex = 1;
     mainPanel.appendChild(img);
+    waves.push(img);
 }
+var waveOffset = 0;
+
+var latestTickTime = new Date().getTime();
 
 function main() {
-    catTimer -= tickTime;
+    var detlaTime = new Date().getTime() - latestTickTime;
+    catTimer -= detlaTime;
     if (catTimer <= 0) {
         catTimer = catTime;
         var img = document.createElement('img');
         img.src = './snowflake.png';
         img.style.position = 'absolute';
-        img.style.left = Math.floor(Math.random() * (100 - catWidth)) + '%';
         mainPanel.appendChild(img);
         var cat = new Cat();
         cat.img = img;
+        cat.xSpeed = windSpeed / 2;
+        cat.x = Math.floor(Math.random() * 120 - 20);
         cat.width = snowflakeWidth;
         cats.push(cat);
         cat.img.style.transform = 'rotate(' + cat.angle + ')';
@@ -85,6 +97,14 @@ function main() {
         cat.update();
     }
     cats = cats.filter(cat => cat.alive);
+
+    for (var i = 0; i < waves.length; i++) {
+        var img = waves[i];
+        img.style.left = (i - 1) * 10 + waveOffset + '%';
+    }
+    waveOffset += windSpeed * detlaTime / 1000;
+    if (waveOffset >= 10)
+        waveOffset = 0;
 }
 
 window.addEventListener('resize', receiveSizeChangeEvent);
