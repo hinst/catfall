@@ -56,9 +56,6 @@ Cat.prototype.update = function(deltaTime) {
     }
 }
 
-/** @type {Cat[]} */
-var cats = [];
-
 /** @type {HTMLImageElement[]} */
 var waves = [];
 for (var i = -1; i < 10; i++) {
@@ -73,6 +70,10 @@ for (var i = -1; i < 10; i++) {
     waves.push(img);
 }
 var waveOffset = 0;
+
+/** @type {Cat[]} */
+var cats = {};
+var globalCatId = 1;
 
 var latestTickTime = new Date().getTime();
 
@@ -91,14 +92,15 @@ function main() {
         cat.xSpeed = windSpeed / 2;
         cat.x = Math.floor(Math.random() * (100 + windyOffset) - windyOffset);
         cat.width = snowflakeWidth;
-        cats.push(cat);
+        cats['' + globalCatId++] = cat;
         cat.img.style.transform = 'rotate(' + cat.angle + ')';
     }
-    for (var i = 0; i < cats.length; i++) {
+    for (var i in cats) {
         var cat = cats[i];
         cat.update(deltaTime);
+        if (!cat.alive)
+            delete cats[i];
     }
-    cats = cats.filter(cat => cat.alive);
 
     for (var i = 0; i < waves.length; i++) {
         var img = waves[i];
