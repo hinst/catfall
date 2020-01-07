@@ -9,7 +9,6 @@ function receiveSizeChangeEvent() {
 }
 receiveSizeChangeEvent();
 
-var tickTime = 1000 / 60;
 var catTime = 100;
 var catTimer = 0;
 var catWidth = 5;
@@ -41,10 +40,11 @@ function clipAngle(angle) {
     return angle;
 }
 
-Cat.prototype.update = function() {
-    this.angle += clipAngle(this.angleSpeed * tickTime / 1000);
-    this.x += this.xSpeed * tickTime / 1000;
-    this.y += catFallSpeed * tickTime / 1000;
+/** @param deltaTime {number} */
+Cat.prototype.update = function(deltaTime) {
+    this.angle += clipAngle(this.angleSpeed * deltaTime / 1000);
+    this.x += this.xSpeed * deltaTime / 1000;
+    this.y += catFallSpeed * deltaTime / 1000;
     this.img.style.transform = 'rotate(' + this.angle + 'deg)';
     this.img.style.left = this.x + '%';
     this.img.style.top = this.y + '%';
@@ -76,8 +76,9 @@ var waveOffset = 0;
 var latestTickTime = new Date().getTime();
 
 function main() {
-    var detlaTime = new Date().getTime() - latestTickTime;
-    catTimer -= detlaTime;
+    var deltaTime = new Date().getTime() - latestTickTime;
+    latestTickTime = new Date().getTime();
+    catTimer -= deltaTime;
     if (catTimer <= 0) {
         catTimer = catTime;
         var img = document.createElement('img');
@@ -94,7 +95,7 @@ function main() {
     }
     for (var i = 0; i < cats.length; i++) {
         var cat = cats[i];
-        cat.update();
+        cat.update(deltaTime);
     }
     cats = cats.filter(cat => cat.alive);
 
@@ -102,7 +103,7 @@ function main() {
         var img = waves[i];
         img.style.left = (i - 1) * 10 + waveOffset + '%';
     }
-    waveOffset += windSpeed * detlaTime / 1000;
+    waveOffset += windSpeed * deltaTime / 1000;
     if (waveOffset >= 10)
         waveOffset = 0;
 }
