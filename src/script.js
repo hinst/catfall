@@ -13,7 +13,7 @@ var tickTime = 1000 / 60;
 var catTime = 3000;
 var catTimer = 0;
 var catWidth = 5;
-var catAngleSpeed = 45;
+var catAngleSpeed = 35;
 var catFallSpeed = 5;
 var snowflakeWidth = 3;
 
@@ -24,13 +24,22 @@ function Cat() {
     this.angle = 360 * Math.random();
     this.alive = true;
     this.width = 0;
-    this.angleSpeed = catAngleSpeed * (0.8 * Math.random() + 0.2);
+    this.angleSpeed = catAngleSpeed * (0.7 * Math.random() + 0.3);
+    if (Math.random() < 0.5)
+        this.angleSpeed = -this.angleSpeed;
+}
+
+/** @param angle {number} */
+function clipAngle(angle) {
+    while (angle >= 360)
+        angle -= 360;
+    while (angle < 0)
+        angle += 360;
+    return angle;
 }
 
 Cat.prototype.update = function() {
-    this.angle += this.angleSpeed * tickTime / 1000;
-    while (this.angle >= 360)
-        this.angle -= 360;
+    this.angle += clipAngle(this.angleSpeed * tickTime / 1000);
     this.y += catFallSpeed * tickTime / 1000;
     this.img.style.transform = 'rotate(' + this.angle + 'deg)';
     this.img.style.top = this.y + '%';
