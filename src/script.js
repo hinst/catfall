@@ -53,15 +53,27 @@ Cat.prototype.update = function() {
 /** @type {Cat[]} */
 var cats = [];
 
+var waves = new Array(10);
+for (var i = 0; i < 10; i++) {
+    const img = document.createElement('img');
+    img.src = './wave.svg';
+    img.style.position = 'absolute';
+    img.style.left = i * 10 + '%';
+    img.style.width = '10%';
+    img.style.bottom = 0;
+    img.style.zIndex = 1;
+    mainPanel.appendChild(img);
+}
+
 function main() {
     catTimer -= tickTime;
     if (catTimer <= 0) {
         catTimer = catTime;
         var img = document.createElement('img');
-        img.src = 'snowflake.png';
+        img.src = './snowflake.png';
         img.style.position = 'absolute';
         img.style.left = Math.floor(Math.random() * (100 - catWidth)) + '%';
-        mainPanel.append(img);
+        mainPanel.appendChild(img);
         var cat = new Cat();
         cat.img = img;
         cat.width = snowflakeWidth;
