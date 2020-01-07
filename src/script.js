@@ -112,4 +112,4 @@ function main() {
 
 window.addEventListener('resize', receiveSizeChangeEvent);
 receiveSizeChangeEvent();
-setInterval(main, 1000 / 45);
+setInterval(main, 1000 / 60);
